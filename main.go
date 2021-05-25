@@ -16,10 +16,9 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "mnh",
-	Short: "A tool thats help to punch nat hole so that peer can directly connect to your NATed server without client.",
-	Long: `mnh is a tool that makes exposing a port behind NAT possible.
-mnh client will produce an ip:port pair for your NATed server which can be used for public access.`,
-
+	Short: "A NAT hole punching tool that allows peers directly connect to your NATed server without client.",
+	Long: "mnh is a tool that makes exposing a port behind NAT possible.\n" +
+		"mnh client will produce an ip:port pair for your NATed server which can be used for public access.",
 	Run: func(cmd *cobra.Command, args []string) {
 		trueMain()
 	},
@@ -45,7 +44,7 @@ func cmdRegister(cmd *cobra.Command) {
 	cmd.PersistentFlags().IntVarP(&port, "port", "p", 0, "The local hole port which incoming traffics access to")
 	cmd.PersistentFlags().StringVarP(&service, "service", "t", "127.0.0.1:80", "Target service address. Only need in proxy mode")
 
-	cmd.PersistentFlags().BoolVarP(&upnpD, "disupnp", "u", false, "Disable UPnP")
+	cmd.PersistentFlags().BoolVarP(&upnpD, "disable-upnp", "u", false, "Disable UPnP")
 }
 
 func main() {
