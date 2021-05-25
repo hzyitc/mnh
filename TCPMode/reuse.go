@@ -44,6 +44,8 @@ func NewReuse(rpfc routerPortForward.Config, port int) (Interface, error) {
 }
 
 func (s *reuse) Dial(addr string) (net.Conn, error) {
+	s.rpf.Redo()
+
 	if s.conn != nil {
 		return nil, errors.New("double dial")
 	}

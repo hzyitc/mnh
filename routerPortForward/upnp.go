@@ -7,6 +7,7 @@ type Config struct {
 }
 
 type Interface interface {
+	Redo()
 	Close()
 }
 
@@ -42,6 +43,12 @@ func New(config Config, port int) (Interface, error) {
 
 		d,
 	}, nil
+}
+
+func (s *upnpImpl) Redo() {
+	if s.config.Enable {
+		s.d.Forward(s.port, "mnh")
+	}
 }
 
 func (s *upnpImpl) Close() {
