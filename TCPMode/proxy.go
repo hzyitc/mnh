@@ -17,8 +17,7 @@ type proxy struct {
 	closingChan chan struct{}
 	closedChan  chan struct{}
 
-	listener Interface
-	server   net.Listener
+	listener Listener
 }
 
 func (s *proxy) server_handle(conn net.Conn) {
@@ -68,7 +67,7 @@ func (s *proxy) server_main() {
 	defer s.worker.Done()
 
 	for {
-		conn, err := s.server.Accept()
+		conn, err := s.listener.Accept()
 		if err != nil {
 			select {
 			case <-s.closingChan:
@@ -88,7 +87,7 @@ func NewProxy(rpfc routerPortForward.Config, port int, service string) (Interfac
 		return nil, err
 	}
 
-	listener, server, err := NewListener(rpfc, port)
+	listener, err := NewListener(rpfc, port)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +101,6 @@ func NewProxy(rpfc routerPortForward.Config, port int, service string) (Interfac
 		make(chan struct{}),
 
 		listener,
-		server,
 	}
 
 	go s.server_main()

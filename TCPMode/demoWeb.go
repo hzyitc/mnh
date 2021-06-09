@@ -16,8 +16,7 @@ type demoWeb struct {
 	closingChan chan struct{}
 	closedChan  chan struct{}
 
-	listener Interface
-	server   net.Listener
+	listener Listener
 }
 
 func (s *demoWeb) server_handle(conn net.Conn) {
@@ -49,7 +48,7 @@ func (s *demoWeb) server_main() {
 	defer s.worker.Done()
 
 	for {
-		conn, err := s.server.Accept()
+		conn, err := s.listener.Accept()
 		if err != nil {
 			select {
 			case <-s.closingChan:
@@ -64,7 +63,7 @@ func (s *demoWeb) server_main() {
 }
 
 func NewDemoWeb(rpfc routerPortForward.Config, port int) (Interface, error) {
-	listener, server, err := NewListener(rpfc, port)
+	listener, err := NewListener(rpfc, port)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +76,6 @@ func NewDemoWeb(rpfc routerPortForward.Config, port int) (Interface, error) {
 		make(chan struct{}),
 
 		listener,
-		server,
 	}
 
 	go s.server_main()
