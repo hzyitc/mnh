@@ -29,30 +29,33 @@ func (s *mnhv1) keepalive(duration time.Duration, timeout time.Duration) {
 	defer s.worker.Done()
 
 	for {
+		buf := []byte("heartbeat\n")
+		_, err := s.conn.Write(buf)
+		if err != nil {
+			log.Error("send heartbeat fail:", err.Error())
+			return
+		}
+
+		t := time.Now()
+
+		s.conn.SetReadDeadline(t.Add(duration))
+		buf = make([]byte, 255)
+		_, err = s.conn.Read(buf)
+		if err == nil {
+			s.lastSeen = time.Now()
+		} else {
+			log.Debug("read heartbeat fail:", err.Error())
+		}
+
+		if time.Since(s.lastSeen) > timeout {
+			log.Debug("heartbeat timeout:", time.Since(s.lastSeen).String())
+			return
+		}
+
 		select {
 		case <-s.closingChan:
 			return
-		case <-time.After(duration):
-			buf := []byte("heartbeat\n")
-			_, err := s.conn.Write(buf)
-			if err != nil {
-				log.Error("send heartbeat fail:", err.Error())
-				return
-			}
-
-			s.conn.SetReadDeadline(time.Now().Add(duration))
-			buf = make([]byte, 255)
-			_, err = s.conn.Read(buf)
-			if err == nil {
-				s.lastSeen = time.Now()
-			} else {
-				log.Debug("read heartbeat fail:", err.Error())
-			}
-
-			if time.Since(s.lastSeen) > timeout {
-				log.Debug("heartbeat timeout:", time.Since(s.lastSeen).String())
-				return
-			}
+		case <-time.After(duration - time.Since(t)):
 		}
 	}
 }
