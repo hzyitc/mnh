@@ -42,13 +42,15 @@ Please check [mnh_server](https://github.com/hzyitc/mnh_server).
 
 ```
 Usage:
-  mnh --server <server> [flags]
+  mnh {tcp|udp} --server <server> [flags]
 
 Flags:
   -s, --server string    Help server address (Example "server.com:12345")
   -i, --id string        A unique id to identify your machine
 
-  -m, --mode string      Run mode. Available value: demoWeb proxy (default "demoWeb")
+  -m, --mode string      Run mode.
+                           TCP support: demoWeb proxy (default "demoWeb")
+                           UDP support: demoEcho proxy (default "demoEcho")
   -p, --port int         The local hole port which incoming traffics access to
   -t, --service string   Target service address. Only need in proxy mode (default "127.0.0.1:80")
 
@@ -59,14 +61,22 @@ Flags:
 
 Example:
 
+Run a Web server for test:
+
 ```
-./mnh --server server.com:12345 --id test
+./mnh tcp --server server.com:12345 --id test
+```
+
+Run a UDP Echo server for test:
+
+```
+./mnh udp --server server.com:12345 --id udpEcho --mode demoEcho
 ```
 
 Expose a local web server:
 
 ```
-./mnh --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80
+./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80
 ```
 
 `mnh` will attempt to request UPnP port forwarding by default.
@@ -75,5 +85,5 @@ You can disable it by adding `--disable-upnp`, make sure you have set up port fo
 (See [Pre-requests](#pre-requests))
 
 ```
-./mnh --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
+./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
 ```

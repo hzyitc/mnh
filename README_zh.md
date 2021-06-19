@@ -43,17 +43,19 @@
 
 ```
 Usage:
-  mnh --server <server> [flags]
+  mnh {tcp|udp} --server <server> [flags]
 
 Flags:
   -s, --server string    协助打洞服务器地址 (举例 "server.com:12345")
   -i, --id string        一个用来标识你设备的唯一ID
 
-  -m, --mode string      运行模式. 可选值为: demoWeb proxy (默认为 "demoWeb")
+  -m, --mode string      运行模式.
+                           TCP支持: demoWeb proxy (默认为 "demoWeb")
+                           UDP支持: demoEcho proxy (默认为 "demoEcho")
   -p, --port int         本地洞端口，入口流量将会访问这个端口
   -t, --service string   目标服务地址. 仅proxy模式需要 (默认为 "127.0.0.1:80")
 
-  -u, --disable-upnp          禁用UPnP
+  -u, --disable-upnp     禁用UPnP
 
   -h, --help             输出本帮助
 ```
@@ -61,17 +63,23 @@ Flags:
 使用UPnP协助运行一次快速测试:
 
 ```
-./mnh --server server.com:12345 --id test
+./mnh tcp --server server.com:12345 --id test
+```
+
+使用UPnP协助运行一个测试用的UDP回显服务器:
+
+```
+./mnh udp --server server.com:12345 --id udpEcho --mode demoEcho
 ```
 
 使用UPnP协助暴露本地Web服务器:
 
 ```
-./mnh --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80
+./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80
 ```
 
 不使用UPnP协助暴露本地Web服务器（你可能需要再路由上设置端口转发）:
 
 ```
-./mnh --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
+./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
 ```
