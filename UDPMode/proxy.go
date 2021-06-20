@@ -24,9 +24,6 @@ func (s *proxy) server_handle(timeout time.Duration, addr net.Addr, buf []byte) 
 	s.worker.Add(+1)
 	defer s.worker.Done()
 
-	closing := make(chan int)
-	defer close(closing)
-
 	conn, err := s.listener.Add(addr.String())
 	if err != nil {
 		return
@@ -39,6 +36,8 @@ func (s *proxy) server_handle(timeout time.Duration, addr net.Addr, buf []byte) 
 		return
 	}
 	defer c.Close()
+
+	closing := make(chan int)
 
 	copy := func(dst net.Conn, src net.Conn) {
 		buf := make([]byte, bufSize)

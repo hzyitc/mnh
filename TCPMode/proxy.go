@@ -24,9 +24,6 @@ func (s *proxy) server_handle(conn net.Conn) {
 	s.worker.Add(+1)
 	defer s.worker.Done()
 
-	closing := make(chan int)
-	defer close(closing)
-
 	defer conn.Close()
 
 	log.Info("new connection", conn.RemoteAddr().String())
@@ -35,6 +32,8 @@ func (s *proxy) server_handle(conn net.Conn) {
 		return
 	}
 	defer c.Close()
+
+	closing := make(chan int)
 
 	go func() {
 		io.Copy(conn, c)
