@@ -57,10 +57,10 @@ type listenerConn struct {
 }
 
 func (s *listener) server_main() {
+	defer s.Close()
+
 	s.worker.Add(1)
 	defer s.worker.Done()
-
-	defer s.Close()
 
 	for {
 		buf := make([]byte, bufSize)
