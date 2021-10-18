@@ -1,12 +1,14 @@
 package UDPProtocol
 
 import (
+	"errors"
 	"net"
 	"sync"
 	"time"
 
 	"github.com/hzyitc/mnh/UDPMode"
 	"github.com/hzyitc/mnh/log"
+	"github.com/hzyitc/netutils"
 )
 
 type mnhv1 struct {
@@ -61,7 +63,12 @@ func (s *mnhv1) keepalive(duration time.Duration, timeout time.Duration) {
 }
 
 func NewMnhv1(m UDPMode.Interface, server string, id string) (Interface, error) {
-	conn, err := m.Dial(server)
+	addr, err := netutils.ResolveAddr("udp", server, "mnhv1", 6641)
+	if err != nil {
+		return nil, err
+	}
+
+	conn, err := m.Dial(addr.String())
 	if err != nil {
 		return nil, err
 	}
@@ -81,10 +88,10 @@ func NewMnhv1(m UDPMode.Interface, server string, id string) (Interface, error) 
 	}
 	msg := string(buf[:n])
 
-	holeAddr, err := net.ResolveUDPAddr("udp", msg)
+	holeAddr := netutils.ParseAddr("", msg)
 	if err != nil {
 		conn.Close()
-		return nil, err
+		return nil, errors.New("fail to parse \"" + msg + "\"")
 	}
 
 	s := &mnhv1{
