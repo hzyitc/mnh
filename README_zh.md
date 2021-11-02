@@ -46,7 +46,9 @@ Usage:
   mnh {tcp|udp} --server <server> [flags]
 
 Flags:
-  -s, --server string    协助打洞服务器地址 (举例 "server.com:12345")
+  -s, --server string    协助打洞服务器地址(举例 "server.com", "server.com:6641")
+                           如果仅指定主机名，它会尝试SRV解析
+                           如果SRV解析失败，它会使用默认端口号(6641)
   -i, --id string        一个用来标识你设备的唯一ID
 
   -m, --mode string      运行模式.
@@ -63,23 +65,23 @@ Flags:
 使用UPnP协助运行一次快速测试:
 
 ```
-./mnh tcp --server server.com:12345 --id test
+./mnh tcp --server server.com --id test
 ```
 
 使用UPnP协助运行一个测试用的UDP回显服务器:
 
 ```
-./mnh udp --server server.com:12345 --id udpEcho --mode demoEcho
+./mnh udp --server server.com --id udpEcho --mode demoEcho
 ```
 
 使用UPnP协助暴露本地Web服务器:
 
 ```
-./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80
+./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80
 ```
 
 不使用UPnP协助暴露本地Web服务器（你可能需要再路由上设置端口转发）:
 
 ```
-./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
+./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
 ```

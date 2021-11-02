@@ -50,7 +50,7 @@ var (
 )
 
 func commonCmdRegister(cmd *cobra.Command) {
-	cmd.PersistentFlags().StringVarP(&server, "server", "s", "server.com:12345", "Help server address")
+	cmd.PersistentFlags().StringVarP(&server, "server", "s", "server.com", "Help server address (Support SRV) (Default port: 6641)")
 	cmd.MarkPersistentFlagRequired("server")
 	cmd.PersistentFlags().StringVarP(&id, "id", "i", "", "A unique id to identify your machine")
 

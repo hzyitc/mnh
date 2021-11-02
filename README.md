@@ -45,7 +45,9 @@ Usage:
   mnh {tcp|udp} --server <server> [flags]
 
 Flags:
-  -s, --server string    Help server address (Example "server.com:12345")
+  -s, --server string    Help server address(Example: "server.com", "server.com:6641")
+                           If only specify hostname, it will try SRV resolve.
+                           If SRV failed, it will use default port(6641).
   -i, --id string        A unique id to identify your machine
 
   -m, --mode string      Run mode.
@@ -64,19 +66,19 @@ Example:
 Run a Web server for test:
 
 ```
-./mnh tcp --server server.com:12345 --id test
+./mnh tcp --server server.com --id test
 ```
 
 Run a UDP Echo server for test:
 
 ```
-./mnh udp --server server.com:12345 --id udpEcho --mode demoEcho
+./mnh udp --server server.com --id udpEcho --mode demoEcho
 ```
 
 Expose a local web server:
 
 ```
-./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80
+./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80
 ```
 
 `mnh` will attempt to request UPnP port forwarding by default.
@@ -85,5 +87,5 @@ You can disable it by adding `--disable-upnp`, make sure you have set up port fo
 (See [Pre-requests](#pre-requests))
 
 ```
-./mnh tcp --server server.com:12345 --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
+./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
 ```
