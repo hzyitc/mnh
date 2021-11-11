@@ -58,6 +58,14 @@ Flags:
 
   -u, --disable-upnp     Disable UPnP
 
+  -x, --event-hook       Execute command when event triggered:
+                           escape:
+                             %%: percent sign
+                             %e: Event: connecting fail success disconnected
+                             %m: Error message
+                             %p: Local hole port
+                             %a: Hole addr
+
   -h, --help             help for mnh
 ```
 

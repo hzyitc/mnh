@@ -1,11 +1,15 @@
 package main
 
 import (
+	"net"
 	"os"
+	"os/exec"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
+	"github.com/google/shlex"
 	"github.com/spf13/cobra"
 
 	"github.com/hzyitc/mnh/TCPMode"
@@ -47,6 +51,8 @@ var (
 	service string
 
 	upnpD bool
+
+	eventHook string
 )
 
 func commonCmdRegister(cmd *cobra.Command) {
@@ -58,6 +64,8 @@ func commonCmdRegister(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVarP(&service, "service", "t", "127.0.0.1:80", "Target service address. Only need in proxy mode")
 
 	cmd.PersistentFlags().BoolVarP(&upnpD, "disable-upnp", "u", false, "Disable UPnP")
+
+	cmd.PersistentFlags().StringVarP(&eventHook, "event-hook", "x", "", "Execute command when event triggered")
 }
 
 func tcpCmdRegister(cmd *cobra.Command) {
@@ -72,6 +80,34 @@ func udpCmdRegister(cmd *cobra.Command) {
 	udpCmd.PersistentFlags().StringVarP(&udpMode, "mode", "m", "demoEcho", "Run mode. Available value: demoEcho proxy")
 
 	cmd.AddCommand(udpCmd)
+}
+
+func runHook(event string, errmsg string, port string, addr string) {
+	if eventHook == "" {
+		return
+	}
+
+	cmdline := strings.NewReplacer(
+		"%%", "%",
+		"%e", event,
+		"%m", errmsg,
+		"%p", port,
+		"%a", addr,
+	).Replace(eventHook)
+	log.Debug("Running hook:", cmdline)
+
+	args, err := shlex.Split(cmdline)
+	if err != nil {
+		log.Error("Split hook error:", err.Error())
+		return
+	}
+
+	cmd := exec.Command(args[0], args[1:]...)
+	err = cmd.Start()
+	if err != nil {
+		log.Error("Run hook error:", err.Error())
+		return
+	}
 }
 
 func main() {
@@ -122,9 +158,12 @@ func tcp() {
 
 	for {
 		func() {
+			runHook("connecting", "", "", "")
+
 			protocol, err := TCPProtocol.NewMnhv1(mode, server, id)
 			if err != nil {
 				log.Error("NewMnhv1 error:", err.Error())
+				runHook("fail", err.Error(), "", "")
 				return
 			}
 			defer protocol.Close()
@@ -135,6 +174,11 @@ func tcp() {
 			log.Info("LocalHoleAddr", protocol.LocalHoleAddr().String())
 
 			log.Info("\n\nNow you can use " + protocol.RemoteHoleAddr().String() + " to access your service")
+
+			_, port, _ := net.SplitHostPort(protocol.LocalHoleAddr().String())
+			addr := protocol.RemoteHoleAddr().String()
+			runHook("success", "", port, addr)
+			defer runHook("disconnected", "", port, addr)
 
 			select {
 			case <-protocol.ClosedChan():
@@ -193,9 +237,12 @@ func udp() {
 
 	for {
 		func() {
+			runHook("connecting", "", "", "")
+
 			protocol, err := UDPProtocol.NewMnhv1(mode, server, id)
 			if err != nil {
 				log.Error("NewMnhv1 error:", err.Error())
+				runHook("fail", err.Error(), "", "")
 				return
 			}
 			defer protocol.Close()
@@ -206,6 +253,11 @@ func udp() {
 			log.Info("LocalHoleAddr", protocol.LocalHoleAddr().String())
 
 			log.Info("\n\nNow you can use " + protocol.RemoteHoleAddr().String() + " to access your service")
+
+			_, port, _ := net.SplitHostPort(protocol.LocalHoleAddr().String())
+			addr := protocol.RemoteHoleAddr().String()
+			runHook("success", "", port, addr)
+			defer runHook("disconnected", "", port, addr)
 
 			select {
 			case <-protocol.ClosedChan():

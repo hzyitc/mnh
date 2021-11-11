@@ -59,6 +59,14 @@ Flags:
 
   -u, --disable-upnp     禁用UPnP
 
+  -x, --event-hook       在事件触发后执行命令:
+                           转义符:
+                             %%: 百分号
+                             %e: 事件: connecting fail success disconnected
+                             %m: 错误消息
+                             %p: 本地洞端口
+                             %a: 洞地址
+
   -h, --help             输出本帮助
 ```
 
