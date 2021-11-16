@@ -156,6 +156,10 @@ func (s *proxy) Close() error {
 	return err
 }
 
-func (s *proxy) LocalServiceAddr() net.Addr {
+func (s *proxy) LocalHoleAddr() net.Addr {
+	return s.listener.LocalAddr()
+}
+
+func (s *proxy) ServiceAddr() net.Addr {
 	return &s.service
 }

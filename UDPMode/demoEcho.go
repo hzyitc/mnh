@@ -87,6 +87,10 @@ func (s *demoEcho) Close() error {
 	return err
 }
 
-func (s *demoEcho) LocalServiceAddr() net.Addr {
-	return s.listener.LocalServiceAddr()
+func (s *demoEcho) LocalHoleAddr() net.Addr {
+	return s.listener.LocalHoleAddr()
+}
+
+func (s *demoEcho) ServiceAddr() net.Addr {
+	return s.listener.ServiceAddr()
 }

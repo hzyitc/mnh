@@ -235,10 +235,12 @@ func (s *listener) LocalAddr() net.Addr {
 	return s.server.LocalAddr()
 }
 
-func (s *listener) LocalServiceAddr() net.Addr {
-	return &net.UDPAddr{
-		Port: s.port,
-	}
+func (s *listener) LocalHoleAddr() net.Addr {
+	return s.server.LocalAddr()
+}
+
+func (s *listener) ServiceAddr() net.Addr {
+	return s.server.LocalAddr()
 }
 
 func (s *listener) SetDeadline(t time.Time) error {

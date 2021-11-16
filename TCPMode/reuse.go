@@ -93,7 +93,13 @@ func (s *reuse) Close() error {
 	return err
 }
 
-func (s *reuse) LocalServiceAddr() net.Addr {
+func (s *reuse) LocalHoleAddr() net.Addr {
+	return &net.TCPAddr{
+		Port: s.port,
+	}
+}
+
+func (s *reuse) ServiceAddr() net.Addr {
 	return &net.TCPAddr{
 		Port: s.port,
 	}

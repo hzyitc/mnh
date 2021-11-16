@@ -131,7 +131,7 @@ func (s *mnhv1) Close() error {
 	return err
 }
 
-func (s *mnhv1) RemoteServerAddr() net.Addr {
+func (s *mnhv1) ServerAddr() net.Addr {
 	return s.conn.RemoteAddr()
 }
 
@@ -139,6 +139,6 @@ func (s *mnhv1) LocalHoleAddr() net.Addr {
 	return s.conn.LocalAddr()
 }
 
-func (s *mnhv1) RemoteHoleAddr() net.Addr {
+func (s *mnhv1) NATedAddr() net.Addr {
 	return s.holeAddr
 }

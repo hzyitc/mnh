@@ -9,5 +9,6 @@ type Interface interface {
 	ClosedChan() <-chan struct{}
 	Close() error
 
-	LocalServiceAddr() net.Addr
+	LocalHoleAddr() net.Addr
+	ServiceAddr() net.Addr
 }

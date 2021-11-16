@@ -85,8 +85,10 @@ func (s *listener) Close() error {
 	}
 }
 
-func (s *listener) LocalServiceAddr() net.Addr {
-	return &net.TCPAddr{
-		Port: s.port,
-	}
+func (s *listener) LocalHoleAddr() net.Addr {
+	return s.reuse.LocalHoleAddr()
+}
+
+func (s *listener) ServiceAddr() net.Addr {
+	return s.Listener.Addr()
 }

@@ -168,15 +168,15 @@ func tcp() {
 			}
 			defer protocol.Close()
 
-			log.Info("LocalServiceAddr", mode.LocalServiceAddr().String())
-			log.Info("RemoteServerAddr", protocol.RemoteServerAddr().String())
-			log.Info("RemoteHoleAddr", protocol.RemoteHoleAddr().String())
+			log.Info("ServiceAddr", mode.ServiceAddr().String())
+			log.Info("ServerAddr", protocol.ServerAddr().String())
+			log.Info("NATedAddr", protocol.NATedAddr().String())
 			log.Info("LocalHoleAddr", protocol.LocalHoleAddr().String())
 
-			log.Info("\n\nNow you can use " + protocol.RemoteHoleAddr().String() + " to access your service")
+			log.Info("\n\nNow you can use " + protocol.NATedAddr().String() + " to access your service")
 
 			_, port, _ := net.SplitHostPort(protocol.LocalHoleAddr().String())
-			addr := protocol.RemoteHoleAddr().String()
+			addr := protocol.NATedAddr().String()
 			runHook("success", "", port, addr)
 			defer runHook("disconnected", "", port, addr)
 
@@ -247,15 +247,15 @@ func udp() {
 			}
 			defer protocol.Close()
 
-			log.Info("LocalServiceAddr", mode.LocalServiceAddr().String())
-			log.Info("RemoteServerAddr", protocol.RemoteServerAddr().String())
-			log.Info("RemoteHoleAddr", protocol.RemoteHoleAddr().String())
+			log.Info("ServiceAddr", mode.ServiceAddr().String())
+			log.Info("ServerAddr", protocol.ServerAddr().String())
+			log.Info("NATedAddr", protocol.NATedAddr().String())
 			log.Info("LocalHoleAddr", protocol.LocalHoleAddr().String())
 
-			log.Info("\n\nNow you can use " + protocol.RemoteHoleAddr().String() + " to access your service")
+			log.Info("\n\nNow you can use " + protocol.NATedAddr().String() + " to access your service")
 
 			_, port, _ := net.SplitHostPort(protocol.LocalHoleAddr().String())
-			addr := protocol.RemoteHoleAddr().String()
+			addr := protocol.NATedAddr().String()
 			runHook("success", "", port, addr)
 			defer runHook("disconnected", "", port, addr)
 

@@ -105,6 +105,10 @@ func (s *demoWeb) Close() error {
 	return err
 }
 
-func (s *demoWeb) LocalServiceAddr() net.Addr {
-	return s.listener.LocalServiceAddr()
+func (s *demoWeb) LocalHoleAddr() net.Addr {
+	return s.listener.LocalHoleAddr()
+}
+
+func (s *demoWeb) ServiceAddr() net.Addr {
+	return s.listener.ServiceAddr()
 }
