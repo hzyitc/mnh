@@ -3,6 +3,8 @@
 
 [README](README.md) | [中文文档](README_zh.md)
 
+**!!! Note: `mnh` is currently in development, the `APIs` and `command line options` may not be backward compatible !!!**
+
 ## Introduction
 
 `mnh` is a tool that makes exposing a port behind NAT possible.
