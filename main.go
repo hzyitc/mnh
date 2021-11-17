@@ -156,9 +156,10 @@ func tcp() {
 	}
 	defer mode.Close()
 
+	_, port, _ := net.SplitHostPort(mode.LocalHoleAddr().String())
 	for {
 		func() {
-			runHook("connecting", "", "", "")
+			runHook("connecting", "", string(port), "")
 
 			protocol, err := TCPProtocol.NewMnhv1(mode, server, id)
 			if err != nil {
@@ -175,7 +176,6 @@ func tcp() {
 
 			log.Info("\n\nNow you can use " + protocol.NATedAddr().String() + " to access your service")
 
-			_, port, _ := net.SplitHostPort(protocol.LocalHoleAddr().String())
 			addr := protocol.NATedAddr().String()
 			runHook("success", "", port, addr)
 			defer runHook("disconnected", "", port, addr)
@@ -235,9 +235,10 @@ func udp() {
 	}
 	defer mode.Close()
 
+	_, port, _ := net.SplitHostPort(mode.LocalHoleAddr().String())
 	for {
 		func() {
-			runHook("connecting", "", "", "")
+			runHook("connecting", "", string(port), "")
 
 			protocol, err := UDPProtocol.NewMnhv1(mode, server, id)
 			if err != nil {
@@ -254,7 +255,6 @@ func udp() {
 
 			log.Info("\n\nNow you can use " + protocol.NATedAddr().String() + " to access your service")
 
-			_, port, _ := net.SplitHostPort(protocol.LocalHoleAddr().String())
 			addr := protocol.NATedAddr().String()
 			runHook("success", "", port, addr)
 			defer runHook("disconnected", "", port, addr)
