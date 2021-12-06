@@ -108,6 +108,13 @@ func runHook(event string, errmsg string, port string, addr string) {
 		log.Error("Run hook error:", err.Error())
 		return
 	}
+
+	go func() {
+		err = cmd.Wait()
+		if err != nil {
+			log.Error("Wait hook error:", err.Error())
+		}
+	}()
 }
 
 func main() {
