@@ -1,0 +1,31 @@
+name: Auto release
+
+on:
+  push:
+    tags: "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Build
+        run: bash ./buildAllPlatforms.sh
+      
+      - name: Release
+        run: |
+          if ! hub release show "$GITHUB_REF_NAME" &>/dev/null; then
+            message="$GITHUB_REF_NAME"
+            hub release create $(for a in bin/*; do echo -a $a; done) "$GITHUB_REF_NAME" -m "$message"
+          else
+            hub release edit $(for a in bin/*; do echo -a $a; done) "$GITHUB_REF_NAME" -m ""
+          fi
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
