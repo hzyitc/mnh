@@ -75,26 +75,31 @@ Flags:
   -h, --help             输出本帮助
 ```
 
-使用UPnP协助运行一次快速测试:
+运行Web服务器进行测试:
 
 ```
 ./mnh tcp --server server.com --id test
 ```
 
-使用UPnP协助运行一个测试用的UDP回显服务器:
+运行UDP回显服务器进行测试:
 
 ```
 ./mnh udp --server server.com --id udpEcho --mode demoEcho
 ```
 
-使用UPnP协助暴露本地Web服务器:
+暴露本地Web服务器:
 
 ```
 ./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80
 ```
 
-不使用UPnP协助暴露本地Web服务器（你可能需要再路由上设置端口转发）:
+`mnh` 默认会尝试使用`upnp`协议来请求路由器进行端口转发。
+
+如果失败了， 将会显示一个提示信息(`notice`)。
+
+可以通过设置 `--routerForward none` 来关闭这两个功能，但请确保你已经正确地设置了端口转发。
+(参见 [要求](#要求))
 
 ```
-./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
+./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80 --port 8888 --routerForward none
 ```

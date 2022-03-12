@@ -94,11 +94,13 @@ Expose a local web server:
 ./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80
 ```
 
-`mnh` will attempt to request UPnP port forwarding by default.
+`mnh` will attempt to request router to do port forwarding with `upnp` protocol by default.
 
-You can disable it by adding `--disable-upnp`, make sure you have set up port forwarding correctly.
+If failed, it will show a `notice`. 
+
+You can disable these two functions by set `--routerForward none`, make sure you have set up port forwarding correctly.
 (See [Pre-requests](#pre-requests))
 
 ```
-./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80 --port 8888 --disable-upnp
+./mnh tcp --server server.com --id web --mode proxy --service 127.0.0.1:80 --port 8888 --routerForward none
 ```
