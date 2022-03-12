@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/hzyitc/mnh/log"
-	"github.com/hzyitc/mnh/routerPortForward"
 )
 
 type proxy struct {
@@ -104,13 +103,13 @@ func (s *proxy) server_main(timeout time.Duration) {
 	}
 }
 
-func NewProxy(rpfc routerPortForward.Config, port int, service string) (Interface, error) {
+func NewProxy(rfc string, port int, service string) (Interface, error) {
 	service_addr, err := net.ResolveUDPAddr("udp", service)
 	if err != nil {
 		return nil, err
 	}
 
-	listener, err := NewListener(rpfc, port)
+	listener, err := NewListener(rfc, port)
 	if err != nil {
 		return nil, err
 	}

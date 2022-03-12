@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/hzyitc/mnh/log"
-	"github.com/hzyitc/mnh/routerPortForward"
+	"github.com/hzyitc/mnh/routerForward"
 )
 
 const listener_bufferLen = 64
@@ -23,7 +23,7 @@ type Listener interface {
 
 type listener struct {
 	port int
-	rpf  routerPortForward.Interface
+	rpf  routerForward.Interface
 
 	worker      *sync.WaitGroup
 	closingChan chan struct{}
@@ -88,8 +88,8 @@ func (s *listener) server_main() {
 
 }
 
-func NewListener(rpfc routerPortForward.Config, port int) (Listener, error) {
-	rpf, err := routerPortForward.New(rpfc, port)
+func NewListener(rfc string, port int) (Listener, error) {
+	rpf, err := routerForward.NewUDPForward(rfc, port)
 	if err != nil {
 		return nil, err
 	}

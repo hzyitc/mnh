@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/hzyitc/mnh/log"
-	"github.com/hzyitc/mnh/routerPortForward"
 )
 
 type demoWeb struct {
@@ -59,8 +58,8 @@ func (s *demoWeb) server_main() {
 	}
 }
 
-func NewDemoWeb(rpfc routerPortForward.Config, port int) (Interface, error) {
-	listener, err := NewListener(rpfc, port)
+func NewDemoWeb(rfc string, port int) (Interface, error) {
+	listener, err := NewListener(rfc, port)
 	if err != nil {
 		return nil, err
 	}

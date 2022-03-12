@@ -7,12 +7,12 @@ import (
 
 	"github.com/libp2p/go-reuseport"
 
-	"github.com/hzyitc/mnh/routerPortForward"
+	"github.com/hzyitc/mnh/routerForward"
 )
 
 type reuse struct {
 	port int
-	rpf  routerPortForward.Interface
+	rpf  routerForward.Interface
 
 	closingChan chan struct{}
 	closedChan  chan struct{}
@@ -26,8 +26,8 @@ type reuseConn struct {
 	reuse *reuse
 }
 
-func NewReuse(rpfc routerPortForward.Config, port int) (Interface, error) {
-	rpf, err := routerPortForward.New(rpfc, port)
+func NewReuse(rfc string, port int) (Interface, error) {
+	rpf, err := routerForward.NewTCPForward(rfc, port)
 	if err != nil {
 		return nil, err
 	}

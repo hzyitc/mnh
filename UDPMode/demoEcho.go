@@ -6,7 +6,6 @@ import (
 	"sync"
 
 	"github.com/hzyitc/mnh/log"
-	"github.com/hzyitc/mnh/routerPortForward"
 )
 
 type demoEcho struct {
@@ -41,8 +40,8 @@ func (s *demoEcho) server_main() {
 	}
 }
 
-func NewDemoEcho(rpfc routerPortForward.Config, port int) (Interface, error) {
-	listener, err := NewListener(rpfc, port)
+func NewDemoEcho(rfc string, port int) (Interface, error) {
+	listener, err := NewListener(rfc, port)
 	if err != nil {
 		return nil, err
 	}

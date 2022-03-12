@@ -17,7 +17,7 @@ import (
 	"github.com/hzyitc/mnh/UDPMode"
 	"github.com/hzyitc/mnh/UDPProtocol"
 	"github.com/hzyitc/mnh/log"
-	"github.com/hzyitc/mnh/routerPortForward"
+	"github.com/hzyitc/mnh/routerForward"
 )
 
 var rootCmd = &cobra.Command{
@@ -50,7 +50,7 @@ var (
 	port    int
 	service string
 
-	upnpD bool
+	rf string
 
 	eventHook string
 )
@@ -63,7 +63,7 @@ func commonCmdRegister(cmd *cobra.Command) {
 	cmd.PersistentFlags().IntVarP(&port, "port", "p", 0, "The local hole port which incoming traffics access to")
 	cmd.PersistentFlags().StringVarP(&service, "service", "t", "127.0.0.1:80", "Target service address. Only need in proxy mode")
 
-	cmd.PersistentFlags().BoolVarP(&upnpD, "disable-upnp", "u", false, "Disable UPnP")
+	cmd.PersistentFlags().StringVarP(&rf, "routerForward", "r", "upnp,notice", "A comma-split list which will use to try to do port forward on router. Support value: "+strings.Join(routerForward.ProtocolList, " "))
 
 	cmd.PersistentFlags().StringVarP(&eventHook, "event-hook", "x", "", "Execute command when event triggered")
 }
@@ -136,23 +136,19 @@ func tcp() {
 		close(closing)
 	}()
 
-	upnpConfig := routerPortForward.Config{
-		Enable: !upnpD,
-	}
-
 	var (
 		mode TCPMode.Interface
 		err  error
 	)
 	switch tcpMode {
 	case "demoWeb":
-		mode, err = TCPMode.NewDemoWeb(upnpConfig, port)
+		mode, err = TCPMode.NewDemoWeb(rf, port)
 		if err != nil {
 			log.Error("NewDemoWeb error:", err.Error())
 			return
 		}
 	case "proxy":
-		mode, err = TCPMode.NewProxy(upnpConfig, port, service)
+		mode, err = TCPMode.NewProxy(rf, port, service)
 		if err != nil {
 			log.Error("NewProxy error:", err.Error())
 			return
@@ -215,23 +211,19 @@ func udp() {
 		close(closing)
 	}()
 
-	upnpConfig := routerPortForward.Config{
-		Enable: !upnpD,
-	}
-
 	var (
 		mode UDPMode.Interface
 		err  error
 	)
 	switch udpMode {
 	case "demoEcho":
-		mode, err = UDPMode.NewDemoEcho(upnpConfig, port)
+		mode, err = UDPMode.NewDemoEcho(rf, port)
 		if err != nil {
 			log.Error("NewDemoEcho error:", err.Error())
 			return
 		}
 	case "proxy":
-		mode, err = UDPMode.NewProxy(upnpConfig, port, service)
+		mode, err = UDPMode.NewProxy(rf, port, service)
 		if err != nil {
 			log.Error("NewProxy error:", err.Error())
 			return

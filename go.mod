@@ -7,5 +7,5 @@ require (
 	github.com/hzyitc/netutils v0.1.0
 	github.com/libp2p/go-reuseport v0.0.2
 	github.com/spf13/cobra v1.1.3
-	gitlab.com/NebulousLabs/go-upnp v0.0.0-20210414172302-67b91c9a5c03
+	gitlab.com/NebulousLabs/go-upnp v0.0.0-20211002182029-11da932010b6
 )

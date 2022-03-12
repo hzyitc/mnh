@@ -5,8 +5,6 @@ import (
 	"strconv"
 
 	"github.com/libp2p/go-reuseport"
-
-	"github.com/hzyitc/mnh/routerPortForward"
 )
 
 type Listener interface {
@@ -24,7 +22,7 @@ type listener struct {
 	reuse Interface
 }
 
-func NewListener(rpfc routerPortForward.Config, port int) (Listener, error) {
+func NewListener(rfc string, port int) (Listener, error) {
 	local := "0.0.0.0:" + strconv.Itoa(port)
 	server, err := reuseport.Listen("tcp", local)
 	if err != nil {
@@ -38,7 +36,7 @@ func NewListener(rpfc routerPortForward.Config, port int) (Listener, error) {
 	}
 	port = addr.Port
 
-	reuse, err := NewReuse(rpfc, port)
+	reuse, err := NewReuse(rfc, port)
 	if err != nil {
 		server.Close()
 		return nil, err
