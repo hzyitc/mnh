@@ -58,7 +58,10 @@ Flags:
   -p, --port int         The local hole port which incoming traffics access to
   -t, --service string   Target service address. Only need in proxy mode (default "127.0.0.1:80")
 
-  -u, --disable-upnp     Disable UPnP
+  -r, --routerForward    A comma-split list which will use to try to do port forward on router.
+                           upnp: UPnP protocol
+                           notice: Will notice you to do port forward manually
+                           none: Do port forward manually
 
   -x, --event-hook       Execute command when event triggered:
                            escape:
