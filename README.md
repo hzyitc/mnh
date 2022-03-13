@@ -58,10 +58,10 @@ Flags:
   -p, --port int         The local hole port which incoming traffics access to
   -t, --service string   Target service address. Only need in proxy mode (default "127.0.0.1:80")
 
-  -r, --routerForward    A comma-split list which will use to try to do port forward on router.
+  -r, --routerForward    A comma-split list which will be used sequentially to request router to do port forwarding (default: "upnp,notice")
                            upnp: UPnP protocol
-                           notice: Will notice you to do port forward manually
-                           none: Do port forward manually
+                           notice: Will notice you to do port forwarding manually
+                           none: Do port forwarding manually
 
   -x, --event-hook       Execute command when event triggered:
                            escape:

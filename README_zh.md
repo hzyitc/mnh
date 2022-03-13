@@ -59,7 +59,7 @@ Flags:
   -p, --port int         本地洞端口，入口流量将会访问这个端口
   -t, --service string   目标服务地址. 仅proxy模式需要 (默认为 "127.0.0.1:80")
 
-  -r, --routerForward    一个逗号分隔的列表。会使用这些来尝试进行路由转发
+  -r, --routerForward    一个逗号分隔的列表。会按照顺序使用这些来请求路由器进行端口转发 (默认为 "upnp,notice")
                            upnp: UPnP协议
                            notice: 提示你手动设置端口转发
                            none: 手动设置端口转发

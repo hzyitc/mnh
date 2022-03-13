@@ -63,7 +63,7 @@ func commonCmdRegister(cmd *cobra.Command) {
 	cmd.PersistentFlags().IntVarP(&port, "port", "p", 0, "The local hole port which incoming traffics access to")
 	cmd.PersistentFlags().StringVarP(&service, "service", "t", "127.0.0.1:80", "Target service address. Only need in proxy mode")
 
-	cmd.PersistentFlags().StringVarP(&rf, "routerForward", "r", "upnp,notice", "A comma-split list which will use to try to do port forward on router. Support value: "+strings.Join(routerForward.ProtocolList, " "))
+	cmd.PersistentFlags().StringVarP(&rf, "routerForward", "r", "upnp,notice", "A comma-split list which will be used sequentially to request router to do port forwarding. Support value: "+strings.Join(routerForward.ProtocolList, " "))
 
 	cmd.PersistentFlags().StringVarP(&eventHook, "event-hook", "x", "", "Execute command when event triggered")
 }
