@@ -3,6 +3,8 @@ package routerForward
 import (
 	"errors"
 	"strings"
+
+	"github.com/hzyitc/mnh/log"
 )
 
 type Interface interface {
@@ -36,6 +38,7 @@ func NewTCPForward(config string, port int) (Interface, error) {
 		return nil, errors.New("Unsupport RouterForward protocol: " + strings.Join(unsupported, " "))
 	}
 
+	log.Info("Attempting to request router to do port forwarding")
 	for _, p := range list {
 		i, err := func() (Interface, error) {
 			switch p {
@@ -67,6 +70,7 @@ func NewUDPForward(config string, port int) (Interface, error) {
 		return nil, errors.New("Unsupport RouterForward protocol: " + strings.Join(unsupported, " "))
 	}
 
+	log.Info("Attempting to request router to do port forwarding")
 	for _, p := range list {
 		i, err := func() (Interface, error) {
 			switch p {

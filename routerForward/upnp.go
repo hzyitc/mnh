@@ -1,6 +1,11 @@
 package routerForward
 
 import (
+	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"gitlab.com/NebulousLabs/go-upnp"
 )
 
@@ -12,7 +17,10 @@ type UPNP struct {
 }
 
 func newUPNP(udp bool, port int) (Interface, error) {
-	igd, err := upnp.Discover()
+	ctx, done := signal.NotifyContext(context.TODO(), os.Interrupt, syscall.SIGTERM)
+	defer done()
+
+	igd, err := upnp.DiscoverCtx(ctx)
 	if err != nil {
 		return nil, err
 	}
