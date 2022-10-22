@@ -20,11 +20,20 @@ import (
 	"github.com/hzyitc/mnh/routerForward"
 )
 
+var version = "v0.0.0"
+
 var rootCmd = &cobra.Command{
 	Use:   "mnh",
 	Short: "A NAT hole punching tool that allows peers directly connect to your NATed server without client.",
 	Long: "mnh is a tool that makes exposing a port behind NAT possible.\n" +
 		"mnh client will produce an ip:port pair for your NATed server which can be used for public access.",
+}
+
+var versionCmd = &cobra.Command{
+	Use: "version",
+	Run: func(cmd *cobra.Command, args []string) {
+		print(version)
+	},
 }
 
 var tcpCmd = &cobra.Command{
@@ -118,6 +127,7 @@ func runHook(event string, errmsg string, port string, addr string) {
 }
 
 func main() {
+	rootCmd.AddCommand(versionCmd)
 	tcpCmdRegister(rootCmd)
 	udpCmdRegister(rootCmd)
 
