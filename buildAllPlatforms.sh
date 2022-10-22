@@ -1,7 +1,8 @@
 #!/bin/bash
 
-OUTPUT="bin/"
 PROGRAM="mnh"
+CLI="./"
+OUTPUT="bin/"
 LDFLAGS="-s -w"
 
 ver="$(git describe --tags --match "v*" --dirty="" 2>/dev/null || git log -1 --pretty=format:"v0.0.0-%h" 2>/dev/null || echo "v0.0.0")"
@@ -30,12 +31,12 @@ for i in "${platforms[@]}"; do
 	os="$(echo "$i" | awk -F/ '{print $1}')"
 	arch="$(echo "$i" | awk -F/ '{print $2}')"
 	mips="$(echo "$i" | awk -F/ '{print $3}')"
-	if [ "$os" == "windows" ]; then
-		suffix="${os}-${arch}.exe"
-	else
-		suffix="${os}-${arch}"
-	fi
-	filename="$OUTPUT/${PROGRAM}-$suffix"
+
+	[ "$os" == "windows" ] && ext="exe"
+
+	filename="${OUTPUT}/${PROGRAM}_${ver}_${os}_${arch}${ext:+.$ext}"
+
 	echo "build $filename for $i"
-	CGO_ENABLED=0 GOOS=$os GOARCH=$arch GOMIPS=$mips go build -trimpath -ldflags "$LDFLAGS" -o "$filename"
+	CGO_ENABLED=0 GOOS="${os}" GOARCH="${arch}" GOMIPS="${mips}" \
+		go build -trimpath -ldflags "$LDFLAGS" -o "${filename}" ${CLI}
 done
