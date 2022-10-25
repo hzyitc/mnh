@@ -32,7 +32,7 @@ var rootCmd = &cobra.Command{
 var versionCmd = &cobra.Command{
 	Use: "version",
 	Run: func(cmd *cobra.Command, args []string) {
-		print(version)
+		println(version)
 	},
 }
 
