@@ -6,7 +6,7 @@ OUTPUT="bin/"
 LDFLAGS="-s -w"
 
 ver="$(git describe --tags --match "v*" --dirty="" 2>/dev/null || git log -1 --pretty=format:"v0.0.0-%h" 2>/dev/null || echo "v0.0.0")"
-[ -n "$(git status --porcelain |& grep -Ev '^\?\?')" ] && ver="$ver-$(date +"%Y%M%d-%H%m%S")"
+[ -n "$(git status --porcelain |& grep -Ev '^\?\?')" ] && ver="$ver-$(date +"%Y%m%d-%H%M%S")"
 LDFLAGS="$LDFLAGS -X main.version=$ver"
 
 mkdir -p "$OUTPUT"
