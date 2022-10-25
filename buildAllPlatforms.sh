@@ -10,7 +10,7 @@ ver="$(git describe --tags --match "v*" --dirty="" 2>/dev/null || git log -1 --p
 LDFLAGS="$LDFLAGS -X main.version=$ver"
 
 mkdir -p "$OUTPUT"
-rm -f "$OUTPUT/${PROGRAM}-"*
+rm -f "$OUTPUT/${PROGRAM}_"*
 
 platforms=(
 	linux/386
