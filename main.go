@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net"
 	"os"
 	"os/exec"
@@ -138,13 +139,8 @@ func main() {
 }
 
 func tcp() {
-	c := make(chan os.Signal)
-	closing := make(chan struct{})
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		close(closing)
-	}()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	var (
 		mode TCPMode.Interface
@@ -196,13 +192,13 @@ func tcp() {
 			select {
 			case <-protocol.ClosedChan():
 				return
-			case <-closing:
+			case <-ctx.Done():
 				return
 			}
 		}()
 
 		select {
-		case <-closing:
+		case <-ctx.Done():
 			return
 		default:
 		}
@@ -213,13 +209,8 @@ func tcp() {
 }
 
 func udp() {
-	c := make(chan os.Signal)
-	closing := make(chan struct{})
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		close(closing)
-	}()
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
 
 	var (
 		mode UDPMode.Interface
@@ -271,13 +262,13 @@ func udp() {
 			select {
 			case <-protocol.ClosedChan():
 				return
-			case <-closing:
+			case <-ctx.Done():
 				return
 			}
 		}()
 
 		select {
-		case <-closing:
+		case <-ctx.Done():
 			return
 		default:
 		}
